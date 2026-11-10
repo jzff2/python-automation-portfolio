@@ -1,0 +1,34 @@
+test_demo_runs (test_find_customers.TestFindCustomers.test_demo_runs) ... ok
+test_homework_is_noise (test_find_customers.TestFindCustomers.test_homework_is_noise) ... ok
+test_life_reward_is_noise (test_find_customers.TestFindCustomers.test_life_reward_is_noise) ... ok
+test_parse_time (test_find_customers.TestFindCustomers.test_parse_time) ... ok
+test_plain_chat_has_no_signal (test_find_customers.TestFindCustomers.test_plain_chat_has_no_signal) ... ok
+test_tech_paid_request (test_find_customers.TestFindCustomers.test_tech_paid_request) ... ok
+test_add_and_report_numbers (test_jobs.TestJobs.test_add_and_report_numbers) ... ok
+test_empty_report (test_jobs.TestJobs.test_empty_report) ... ok
+test_fields_command (test_jobs.TestJobs.test_fields_command) ... ok
+test_high_frequency_problem_ranking (test_jobs.TestJobs.test_high_frequency_problem_ranking) ... ok
+test_list_contains_diagnosis (test_jobs.TestJobs.test_list_contains_diagnosis) ... ok
+test_merge_legacy_ledger (test_jobs.TestJobs.test_merge_legacy_ledger)
+上一轮的 ledger.csv 实收应被合并进汇总。 ... ok
+test_unknown_field_rejected (test_jobs.TestJobs.test_unknown_field_rejected) ... ok
+test_demo_writes_raw_file (test_leads.TestLeads.test_demo_writes_raw_file) ... ok
+test_filter_keeps_only_recent_unanswered (test_leads.TestLeads.test_filter_keeps_only_recent_unanswered) ... ok
+test_parse_time_valid_and_invalid (test_leads.TestLeads.test_parse_time_valid_and_invalid) ... ok
+test_show_without_filter_does_not_crash (test_leads.TestLeads.test_show_without_filter_does_not_crash) ... ok
+test_flags_all_four_risk_blocks (test_srt_check.TestSrtCheck.test_flags_all_four_risk_blocks) ... ok
+test_malformed_input (test_srt_check.TestSrtCheck.test_malformed_input) ... ok
+test_no_autocorrection (test_srt_check.TestSrtCheck.test_no_autocorrection)
+检查器只输出疑似清单，不改写源文件。 ... ok
+test_show_all_flag (test_srt_check.TestSrtCheck.test_show_all_flag) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 3.194s
+
+OK
+demo 假数据 4 条 -> leads_raw.json
+原始 4 条 -> 合格 1 条
+淘汰明细: {'过期': 1, '已有回复': 1, '命中排除词': 1, '无关键词': 0, '时间不可解析': 0}
+原始 5 条 -> 合格 1 条
+淘汰明细: {'过期': 1, '已有回复': 1, '命中排除词': 1, '无关键词': 1, '时间不可解析': 0}
+TOTAL=21  FAIL=0  ERROR=0

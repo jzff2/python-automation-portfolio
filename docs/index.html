@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Worked Example — Windows / Python Automation Modules</title>
+<style>
+  :root { --ink:#1b1f24; --muted:#5a6472; --line:#e3e7ec; --bg:#f7f8fa; --card:#fff; --accent:#1f5fbf; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
+  main { max-width:900px; margin:0 auto; padding:48px 22px 72px; }
+  h1 { font-size:29px; line-height:1.25; margin:0 0 10px; letter-spacing:-.4px; }
+  h2 { font-size:19px; margin:38px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  p { margin:10px 0; }
+  .sub { color:var(--muted); font-size:16px; margin:0 0 18px; }
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 6px; }
+  .badge { background:#eaf1fc; color:#1f4e96; border:1px solid #d3e2f8;
+           border-radius:999px; padding:4px 12px; font-size:13px; font-weight:600; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px;
+          padding:18px 20px; margin:16px 0; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--muted); font-weight:600; background:#fbfcfd; }
+  td code, p code, li code { background:#f1f3f6; padding:1px 5px; border-radius:4px;
+                             font:13px ui-monospace,Consolas,Menlo,monospace; }
+  pre { background:#11161d; color:#dce3ec; border-radius:8px; padding:14px 16px;
+        overflow:auto; font:13px/1.55 ui-monospace,Consolas,Menlo,monospace; }
+  ul { padding-left:20px; }
+  li { margin:6px 0; }
+  .dl { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+  .dl a { display:inline-block; padding:9px 15px; border:1px solid #c9d8ef; border-radius:7px;
+          background:#f2f7ff; color:var(--accent); text-decoration:none; font-size:14px; font-weight:600; }
+  .dl a:hover { background:#e5efff; }
+  .note { border-left:3px solid #d9a441; background:#fffaf0; padding:12px 16px;
+          border-radius:0 8px 8px 0; font-size:14.5px; margin:18px 0; }
+  footer { color:var(--muted); font-size:13px; margin-top:44px; border-top:1px solid var(--line); padding-top:16px; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Worked Example: Windows / Python Automation Modules</h1>
+<p class="sub">Six independently runnable modules, test-first delivery, explicit acceptance commands. Built 8–10 November 2026.</p>
+
+<div class="badges">
+  <span class="badge">21 automated tests, 0 failures</span>
+  <span class="badge">Python 3.13 standard library</span>
+  <span class="badge">Public GitHub repository</span>
+  <span class="badge">No credentials in tree</span>
+</div>
+
+<h2>What this is</h2>
+<div class="card">
+<p>A repository of small tools that were actually delivered, then collected with tests and documentation added. No code was written specifically as a demo. Each module has a clear input/output contract, keeps its parameters in config, and can be run, tested and replaced on its own.</p>
+<p>The working loop is the one a written brief describes: <strong>brief → diff → tests → a short plain-English note</strong> stating what changed, how it was tested, and what remains.</p>
+</div>
+
+<h2>Modules</h2>
+<table>
+<thead><tr><th>Module</th><th>What it does</th><th>Notable detail</th></tr></thead>
+<tbody>
+<tr><td><code>jobs.py</code></td><td>Ticket ledger: actual revenue, effective hourly rate, recurring-problem ranking</td><td>Merges a legacy <code>ledger.csv</code>; covered by 7 tests</td></tr>
+<tr><td><code>srt_check.py</code></td><td>Flags suspected errors in machine-generated subtitles (names, numbers, prices, technical terms)</td><td>Deliberately does not auto-correct; a test asserts the source file is never modified</td></tr>
+<tr><td><code>leads.py</code></td><td>Signal collection and filtering by age, reply count, keywords and exclusion terms</td><td>One test caught a real defect in the CLI dispatcher on its first run</td></tr>
+<tr><td><code>find_customers.py</code></td><td>Separates paid technical requests from unrelated reward posts</td><td>Two-stage: coarse keyword screen, then detail lookup only for candidates</td></tr>
+<tr><td><code>outreach.py</code></td><td>Drafting, rate-limited sending, deal logging</td><td>Dry-run is the default; send switch is off in the sample config</td></tr>
+<tr><td><code>fish_pet.pyw</code></td><td>WebView2 window reparented into the Windows <code>WorkerW</code> desktop background layer</td><td>Supervisor/child architecture with verified restart behaviour</td></tr>
+</tbody>
+</table>
+
+<h2>Test result</h2>
+<p>Run with <code>python run_tests.py</code> — no pytest, no third-party packages. Each test copies the source into a temporary sandbox and invokes the real CLI in a subprocess, so the source needs no modification and no runtime data lands in the repository.</p>
+<pre>Ran 21 tests
+TOTAL=21  FAIL=0  ERROR=0</pre>
+<p>First run was 20/21. <code>test_show_without_filter_does_not_crash</code> found a genuine bug: the command dispatcher loaded configuration unconditionally, so a pure query command raised <code>FileNotFoundError</code> in a directory without a config file. The fix changed only the dispatcher; every business function is untouched, and the README records the difference between that copy and the production copy.</p>
+
+<h2>Engineering findings, with reproduction notes</h2>
+<ul>
+<li><strong>Choosing the desktop background layer on Windows 11:</strong> this machine has more than twenty top-level <code>WorkerW</code> windows. The usual heuristic — pick the one without a <code>SHELLDLL_DefView</code> child — selects an unrelated window. The reliable rule is to select the <code>WorkerW</code> whose parent is <code>Progman</code> (here <code>68314</code>). Verified: resulting window <code>rect=(0,0)-(1920,1080)</code>, sitting behind desktop icons.</li>
+<li><strong>pywebview 6.2.1:</strong> the <code>Window</code> object exposes no <code>native_window</code>, and the <code>loaded</code> event did not fire under this configuration. The HWND is found by enumerating windows by title, and reparenting runs in a polling thread.</li>
+<li><strong>Silent process death:</strong> an Explorer restart destroys the WebView2 parent window and kills pythonw without a traceback. A supervisor restarts the renderer after three seconds; a marker file makes the quit hotkey exit both processes. Verified by window-tree enumeration and a debug log (all <code>fish_pet</code> processes reach zero).</li>
+<li><strong>64-bit HWND:</strong> ctypes <code>argtypes</code>/<code>restype</code> are declared explicitly; <code>wintypes.LRESULT</code> does not exist and is replaced with <code>ctypes.c_longlong</code>.</li>
+</ul>
+
+<h2>Downloads</h2>
+<div class="dl">
+  <a href="https://github.com/jzff/python-automation-portfolio">Browse the repository</a>
+  <a href="portfolio-source.zip">Source (zip)</a>
+  <a href="portfolio.bundle">Git bundle</a>
+  <a href="test-output.txt">Full test output</a>
+</div>
+<p style="font-size:14px;color:var(--muted)">The bundle reconstructs the complete commit history: <code>git clone portfolio.bundle portfolio</code>.</p>
+
+<div class="note">
+<strong>About this page.</strong> The source lives in a public GitHub repository at <a href="https://github.com/jzff/python-automation-portfolio">jzff/python-automation-portfolio</a>; this page is served from its <code>docs/</code> folder via GitHub Pages. Every claim above can be checked against the tree, the commit history, and the test output. The source tree contains no real credentials, personal paths, or third-party identifiers — sample IDs are constructed values, and the config file is a redacted example.
+</div>
+
+<h2>Not covered by automated tests</h2>
+<ul>
+<li><code>fish_pet.pyw</code> needs pywebview, the system WebView2 runtime, and a running local service; it is verified by window-tree inspection and a debug log rather than unit tests.</li>
+<li>Network scanning and message sending need external credentials. Tests cover their pure logic and dry-run behaviour only; the send switch is off by default.</li>
+</ul>
+
+<footer>
+English page prepared for a client-facing portfolio link. Chinese documentation lives in the source zip (<code>README.md</code>).
+</footer>
+
+</main>
+</body>
+</html>

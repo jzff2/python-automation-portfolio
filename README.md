@@ -2,6 +2,9 @@
 
 一个真实产出、带自动化测试的仓库。模块之间用清楚的接口连，参数外置，每个模块单独能跑、能测、能替换。
 
+- 英文展示页（GitHub Pages）：https://jzff2.github.io/python-automation-portfolio/
+- 测试结果：`python run_tests.py` → `TOTAL=21  FAIL=0  ERROR=0`
+
 ## 这个仓库为什么存在
 
 目标岗位（Upwork「Part-time automation developer: Node.js, Python and n8n」）明确要求提交 **one worked example you have already built: a repository or gist with tests**，并写明 *Please do not build anything new for this application*。

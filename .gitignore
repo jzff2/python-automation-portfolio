@@ -1,0 +1,20 @@
+# Python 缓存
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# 运行产生的数据（含第三方标识，不入库）
+*.csv
+*.log
+leads_raw.json
+leads.json
+customers.json
+customers_raw.json
+drafts.json
+sent.json
+jobs.csv
+ledger.csv
+
+# 临时验证目录
+.verify*/
+test-tmp-*/

@@ -123,7 +123,13 @@ python run_tests.py
 
 ## 与生产版的差异
 
-`src/` 下的六个文件是本机生产文件的**逐字副本**，业务逻辑未改。差异只在两处：
+`src/` 下**五个文件**是本机生产文件的逐字副本；`leads.py` 有且仅有一处改动，由测试发现：
 
-- `config.example.json` 是脱敏样例，替换了生产配置里的本机绝对路径、真实频道 ID 与报价；
-- 生产目录下另有 `leads_raw.json`、`customers.json` 等运行数据，不入库（见 `.gitignore`）。
+- **缺陷**：原 `main()` 无条件先读 `config.json`，导致纯查询命令 `show` 在没有配置文件的目录下抛 `FileNotFoundError`。`tests/test_leads.py::test_show_without_filter_does_not_crash` 首次运行即复现。
+- **修复**：把配置改为按需加载，`scan` / `demo` / `filter` 各自调用 `load_cfg()`，`show` 不再依赖配置。`scan` / `demo` / `filter` / `do_filter` 等函数体一字未改。
+- 生产目录本身有 `config.json`，该缺陷在实际使用中不会触发，因此生产副本未改动；两版差异仅此一处，已在源码注释中标明。
+
+另外两处环境差异：
+
+- `config.example.json` 是脱敏样例，替换了生产配置里的本机绝对路径、真实频道 ID 与报价（示例报价 800，对应公开挂牌可核区间 ¥699–980）；
+- 生产目录下另有 `leads_raw.json`、`customers.json` 等运行数据，不入库（见 `.gitignore`）。真实线索含第三方 `author_id` / `guild_id`，不进公开仓库。
